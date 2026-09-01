@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import Image from "next/image";
 import { certifications } from "@/data/certifications";
 import CertificateModal from "./CertificateModal";
 import { 
@@ -13,7 +14,8 @@ import {
   Scroll, 
   CheckCircle2, 
   ChevronRight,
-  Maximize2
+  Maximize2,
+  FileText
 } from "lucide-react";
 
 export default function CertificationWall() {
@@ -37,14 +39,14 @@ export default function CertificationWall() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 90,
+    damping: 28,
     restDelta: 0.001,
   });
 
   // Transform vertical scroll progress into horizontal translateX
-  // Translates the gallery track across the viewport
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-74%"]);
+  // Translates the gallery track across the viewport for 6 certificates
+  const x = useTransform(smoothProgress, [0, 1], ["0%", "-80%"]);
   const progressLineWidth = useTransform(smoothProgress, [0, 1], ["5%", "100%"]);
 
   return (
@@ -53,7 +55,7 @@ export default function CertificationWall() {
         id="certifications"
         ref={containerRef}
         className={`relative ${
-          isMobile ? "min-h-screen py-20" : "h-[350vh]"
+          isMobile ? "min-h-screen py-20" : "h-[400vh]"
         } bg-[#231710] bg-gallery-wall text-cream-50`}
       >
         {/* Sticky Gallery Viewport */}
@@ -95,7 +97,7 @@ export default function CertificationWall() {
                 {certifications.map((cert, idx) => (
                   <div
                     key={cert.id}
-                    className="snap-center shrink-0 w-[300px] sm:w-[360px] flex flex-col items-center"
+                    className="snap-center shrink-0 w-[310px] sm:w-[360px] flex flex-col items-center"
                     onClick={() => setSelectedCert(cert)}
                   >
                     <FrameItem cert={cert} idx={idx} onInspect={() => setSelectedCert(cert)} />
@@ -111,7 +113,7 @@ export default function CertificationWall() {
                 {certifications.map((cert, idx) => (
                   <div
                     key={cert.id}
-                    className="shrink-0 w-[420px] lg:w-[460px] xl:w-[500px] flex flex-col items-center cursor-pointer group"
+                    className="shrink-0 w-[440px] lg:w-[480px] xl:w-[520px] flex flex-col items-center cursor-pointer group"
                     onClick={() => setSelectedCert(cert)}
                   >
                     <FrameItem cert={cert} idx={idx} onInspect={() => setSelectedCert(cert)} />
@@ -136,12 +138,12 @@ export default function CertificationWall() {
             </div>
 
             <div className="text-xs font-serif italic text-earth-400 hidden sm:block">
-              Click any picture frame for official verification details
+              Click any picture frame for original PDF &amp; official verification
             </div>
 
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono text-gold">
-                05 Official Credentials
+                06 Official Credentials
               </span>
             </div>
           </div>
@@ -171,80 +173,40 @@ function FrameItem({ cert, idx, onInspect }) {
       <div className="w-16 h-4 border-t-2 border-l border-r border-gold/40 rounded-t-sm -mb-2" />
 
       {/* Picture Frame Border (Wood & Gold Inset) */}
-      <div className="wood-frame p-4 sm:p-5 rounded-lg border-[10px] border-[#311E11] shadow-frame hover:shadow-frame-gold transition-all duration-300">
+      <div className="wood-frame p-3 sm:p-4 rounded-lg border-[10px] border-[#311E11] shadow-frame hover:shadow-frame-gold transition-all duration-300">
         {/* Ivory Matting Board */}
-        <div className="bg-[#FAF7F0] text-earth-950 p-6 sm:p-7 rounded-sm shadow-inner relative overflow-hidden flex flex-col justify-between min-h-[300px] sm:min-h-[330px] border border-earth-300/80">
+        <div className="bg-[#FAF7F0] p-2.5 sm:p-3 rounded-sm shadow-inner relative overflow-hidden flex flex-col justify-between border border-earth-300/80">
           
-          {/* Subtle Guilloché / Ornate Watermark Background */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
-          
-          {/* Ornate Frame Corners */}
-          <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-gold-dark" />
-          <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-gold-dark" />
-          <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-gold-dark" />
-          <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-gold-dark" />
+          {/* Certificate Image Inside Frame */}
+          <div className="relative w-full h-[250px] sm:h-[280px] md:h-[300px] rounded-sm overflow-hidden bg-white shadow-sm border border-earth-200 group/img">
+            <Image
+              src={cert.imageUrl}
+              alt={cert.title}
+              fill
+              className="object-contain object-center group-hover/img:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 300px, 500px"
+              priority={idx < 2}
+            />
 
-          {/* Certificate Inner Header */}
-          <div className="text-center space-y-1 pb-3 border-b border-earth-300/70">
-            <div className="flex items-center justify-center gap-1.5 text-[10px] uppercase font-mono tracking-widest text-earth-600">
-              <Award className="w-3 h-3 text-gold-dark" />
-              <span>{cert.issuer} Verified Credential</span>
-            </div>
-            <h4 className="font-serif text-lg sm:text-xl font-bold text-earth-900 leading-tight">
-              {cert.title}
-            </h4>
-          </div>
-
-          {/* Certificate Body & Conferred Text */}
-          <div className="my-auto py-3 text-center space-y-2">
-            <p className="text-[11px] text-earth-600 italic font-serif">
-              Conferred upon
-            </p>
-            <p className="font-serif text-base sm:text-lg font-bold text-earth-900 tracking-wide border-b border-earth-300/40 pb-1 max-w-[220px] mx-auto">
-              Ayushman Bhattacharya
-            </p>
-            <p className="text-[11px] text-earth-700 font-light line-clamp-2 px-2">
-              {cert.description}
-            </p>
-          </div>
-
-          {/* Certificate Footer with Issuer Seal & Credential ID */}
-          <div className="pt-3 border-t border-earth-300/70 flex items-center justify-between">
-            {/* Issuer Seal Crest */}
-            <div className="flex items-center gap-2">
-              <div 
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-md ring-2 ring-gold/50"
-                style={{ backgroundColor: cert.sealColor }}
+            {/* Hover overlay with inspect button */}
+            <div className="absolute inset-0 bg-earth-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onInspect();
+                }}
+                className="px-4 py-2 rounded-full bg-cream-50 text-earth-950 text-xs font-semibold shadow-lg hover:bg-gold hover:text-earth-950 transition-colors flex items-center gap-1.5"
               >
-                ✓
-              </div>
-              <div className="text-left">
-                <span className="block text-[9px] font-mono text-earth-500 uppercase">
-                  Issued
-                </span>
-                <span className="block text-[11px] font-semibold text-earth-800">
-                  {cert.issueDate}
-                </span>
-              </div>
+                <Eye className="w-3.5 h-3.5" />
+                <span>View Full PDF</span>
+              </button>
             </div>
-
-            {/* Hover Inspect CTA */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onInspect();
-              }}
-              className="group/btn flex items-center gap-1 px-2.5 py-1 rounded bg-earth-900 hover:bg-cognac text-cream-50 text-[11px] font-medium transition-colors shadow-xs"
-            >
-              <Eye className="w-3 h-3" />
-              <span>Inspect</span>
-            </button>
           </div>
         </div>
       </div>
 
       {/* Engraved Brass Plaque Mounted Under Frame */}
-      <div className="mt-4 px-4 py-2 rounded-sm brass-plaque flex items-center gap-3 max-w-[340px] text-center">
+      <div className="mt-4 px-4 py-2 rounded-sm brass-plaque flex items-center gap-3 max-w-[360px] text-center">
         <div className="w-1.5 h-1.5 rounded-full bg-earth-900/60 shadow-inner shrink-0" />
         <div className="flex-1">
           <p className="font-serif text-xs sm:text-sm font-bold uppercase tracking-wider text-earth-950 leading-tight">

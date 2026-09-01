@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { 
   Award, 
   ExternalLink, 
@@ -10,7 +11,9 @@ import {
   CheckCircle2,
   Sparkles,
   Building,
-  Hash
+  Hash,
+  FileDown,
+  Maximize2
 } from "lucide-react";
 
 export default function CertificateModal({ certificate, onClose }) {
@@ -19,31 +22,31 @@ export default function CertificateModal({ certificate, onClose }) {
   return (
     <AnimatePresence>
       <div 
-        className="fixed inset-0 z-50 bg-earth-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+        className="fixed inset-0 z-50 bg-earth-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
         onClick={onClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          initial={{ scale: 0.92, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
+          exit={{ scale: 0.92, opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative max-w-3xl w-full bg-cream-50 rounded-3xl border-2 border-earth-300 shadow-2xl overflow-hidden p-6 sm:p-10 my-8"
+          className="relative max-w-4xl w-full bg-cream-50 rounded-3xl border-2 border-earth-300 shadow-2xl overflow-hidden p-6 sm:p-8 my-8 max-h-[92vh] overflow-y-auto"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2.5 rounded-full bg-earth-100 hover:bg-earth-200 text-earth-800 transition-colors z-10"
+            className="absolute top-5 right-5 p-2.5 rounded-full bg-earth-100 hover:bg-earth-200 text-earth-800 transition-colors z-20"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Certificate Header Accent */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-4">
             <span className="px-3 py-1 rounded-full bg-cognac/15 text-cognac text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5" />
-              <span>Verified Credential</span>
+              <span>Verified Official Credential</span>
             </span>
             <span className="text-xs font-mono text-earth-500">
               {certificate.badgeType}
@@ -55,57 +58,51 @@ export default function CertificateModal({ certificate, onClose }) {
             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-earth-900 leading-tight">
               {certificate.title}
             </h3>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-earth-700">
-              <span className="flex items-center gap-1.5 font-medium">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-earth-700">
+              <span className="flex items-center gap-1.5 font-medium text-earth-900">
                 <Building className="w-4 h-4 text-cognac" />
                 {certificate.issuer}
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1.5 font-mono text-xs">
+              <span className="flex items-center gap-1.5 font-mono">
                 <Calendar className="w-3.5 h-3.5 text-earth-500" />
-                Issued {certificate.issueDate}
+                {certificate.issueDate}
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1.5 font-mono text-xs bg-earth-100 px-2 py-0.5 rounded">
+              <span className="flex items-center gap-1.5 font-mono bg-earth-100 px-2.5 py-0.5 rounded border border-earth-200">
                 <Hash className="w-3 h-3 text-earth-500" />
                 {certificate.credentialId}
               </span>
             </div>
           </div>
 
-          {/* High Res Certificate Visual Preview Card */}
-          <div className="relative rounded-2xl p-6 sm:p-8 border-4 border-[#3D2919] bg-[#FAF7F0] shadow-inner mb-6 space-y-4">
-            {/* Ornate corners */}
-            <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-gold" />
-            <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-gold" />
-            <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-gold" />
-            <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-gold" />
+          {/* High Res Certificate Image Display */}
+          <div className="relative w-full h-[320px] sm:h-[420px] md:h-[480px] rounded-2xl overflow-hidden bg-earth-100 border-2 border-earth-300 shadow-lg mb-6">
+            <Image
+              src={certificate.imageUrl}
+              alt={certificate.title}
+              fill
+              className="object-contain p-2 sm:p-4"
+              sizes="(max-width: 1024px) 100vw, 800px"
+              priority
+            />
+          </div>
 
-            <div className="text-center space-y-2 border-b border-earth-300/60 pb-4">
-              <div className="inline-block font-serif text-xs uppercase tracking-widest text-earth-600">
-                Official Certificate of Achievement
-              </div>
-              <h4 className="font-serif text-xl sm:text-2xl font-bold text-earth-900">
-                {certificate.title}
-              </h4>
-              <p className="text-xs text-earth-600">
-                Conferred to <strong className="text-earth-900 font-serif text-sm">Ayushman Bhattacharya</strong>
-              </p>
-            </div>
-
+          {/* Detailed Curriculum & Competency Tags */}
+          <div className="space-y-4 bg-earth-100/60 p-5 rounded-2xl border border-earth-200 mb-6">
             <p className="text-earth-800 text-xs sm:text-sm leading-relaxed font-light">
               {certificate.description}
             </p>
 
-            <div className="pt-2">
+            <div>
               <span className="text-[11px] font-semibold uppercase tracking-wider text-earth-600 block mb-2">
-                Evaluated Competencies:
+                Core Competencies Verified:
               </span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {certificate.skillsCovered.map((skill) => (
                   <span
                     key={skill}
-                    className="px-2.5 py-1 rounded-md bg-white border border-earth-200 text-earth-800 text-xs font-medium"
+                    className="px-3 py-1 rounded-md bg-white border border-earth-300/80 text-earth-900 text-xs font-medium shadow-xs"
                   >
                     ✓ {skill}
                   </span>
@@ -113,10 +110,10 @@ export default function CertificateModal({ certificate, onClose }) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-earth-300/60 text-xs text-earth-600 font-mono">
-              <span>Authority: {certificate.issuer}</span>
+            <div className="flex items-center justify-between pt-3 border-t border-earth-200 text-xs text-earth-600 font-mono">
+              <span>Issuing Body: {certificate.issuer}</span>
               <span className="text-emerald-700 font-semibold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Verified Authenticity
+                <ShieldCheck className="w-4 h-4" /> Authenticity Verified
               </span>
             </div>
           </div>
@@ -130,13 +127,13 @@ export default function CertificateModal({ certificate, onClose }) {
               Close
             </button>
             <a
-              href={certificate.credentialUrl}
+              href={certificate.pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-2.5 rounded-xl bg-earth-900 hover:bg-cognac text-cream-50 text-sm font-semibold flex items-center gap-2 transition-all shadow-md active:scale-95"
             >
-              <span>Verify with {certificate.issuer}</span>
-              <ExternalLink className="w-4 h-4" />
+              <FileDown className="w-4 h-4" />
+              <span>Download / Open Original PDF</span>
             </a>
           </div>
         </motion.div>
