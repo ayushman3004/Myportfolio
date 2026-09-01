@@ -20,34 +20,59 @@ import {
 
 export default function CertificationWall() {
   const containerRef = useRef(null);
+  const trackRef = useRef(null);
   const [selectedCert, setSelectedCert] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [scrollRange, setScrollRange] = useState(0);
 
+  // Measure exact track scroll width to guarantee 100% perfect horizontal travel
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const updateDimensions = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+
+      if (!mobile && trackRef.current) {
+        const totalTrackWidth = trackRef.current.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        // Travel distance needed so the final certificate is fully centered in viewport
+        const distance = Math.max(0, totalTrackWidth - viewportWidth + 140);
+        setScrollRange(distance);
+      }
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+
+    updateDimensions();
+    // Allow images & fonts to load and re-measure accurately
+    const timer = setTimeout(updateDimensions, 400);
+    window.addEventListener("resize", updateDimensions);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateDimensions);
+    };
   }, []);
 
-  // Scroll Jacking calculation for Framer Motion
+  // Track vertical scroll progress within the tall sticky container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
+  // Direct, smooth response to scroll input
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 26,
+    stiffness: 120,
+    damping: 30,
     restDelta: 0.001,
   });
 
-  // Transform vertical scroll progress into horizontal translateX
-  // Translates the broad gallery track across the viewport for 6 large landscape frames
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-85%"]);
-  const progressLineWidth = useTransform(smoothProgress, [0, 1], ["5%", "100%"]);
+  // Map progress:
+  // From 0 to 0.88: Smoothly pan across all 6 broad certificate wallframes
+  // From 0.88 to 1.0: Hold and lock the final certificate in place before unlocking to the next section
+  const x = useTransform(
+    smoothProgress, 
+    [0, 0.88, 1], 
+    [0, -scrollRange || -3200, -scrollRange || -3200]
+  );
+  
+  const progressLineWidth = useTransform(smoothProgress, [0, 0.88, 1], ["5%", "100%", "100%"]);
 
   return (
     <>
@@ -55,10 +80,10 @@ export default function CertificationWall() {
         id="certifications"
         ref={containerRef}
         className={`relative ${
-          isMobile ? "min-h-screen py-20" : "h-[450vh]"
+          isMobile ? "min-h-screen py-20" : "h-[500vh]"
         } bg-[#231710] bg-gallery-wall text-cream-50`}
       >
-        {/* Sticky Gallery Viewport */}
+        {/* Sticky Gallery Viewport (Fixed at top while scrolling) */}
         <div
           className={`${
             isMobile
@@ -90,7 +115,7 @@ export default function CertificationWall() {
           </div>
 
           {/* Center: Broad Picture Frames Gallery Track */}
-          <div className="relative z-10 w-full my-auto py-2">
+          <div className="relative z-10 w-full my-auto py-2 overflow-hidden">
             {isMobile ? (
               /* Mobile Swipeable Track */
               <div className="flex gap-8 overflow-x-auto px-4 pb-8 pt-4 snap-x snap-mandatory no-scrollbar">
@@ -107,8 +132,9 @@ export default function CertificationWall() {
             ) : (
               /* Desktop Scroll-Jacked Framer Motion Track */
               <motion.div
+                ref={trackRef}
                 style={{ x }}
-                className="flex items-center gap-16 sm:gap-20 pl-12 sm:pl-28 pr-[30vw] will-change-transform"
+                className="flex items-center gap-16 sm:gap-20 pl-12 sm:pl-28 pr-[35vw] will-change-transform"
               >
                 {certifications.map((cert, idx) => (
                   <div
