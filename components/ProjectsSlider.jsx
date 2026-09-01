@@ -161,17 +161,16 @@ export default function ProjectsSlider() {
               className="w-full rounded-3xl bg-cream-50 border-2 border-earth-300/80 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 cursor-grab active:cursor-grabbing"
             >
               {/* Left Column: Large Project Mockup & Visual */}
-              <div className="lg:col-span-7 relative bg-earth-900 min-h-[300px] sm:min-h-[380px] lg:min-h-full overflow-hidden flex items-center justify-center group">
-                <div className="relative w-full h-full min-h-[300px] sm:min-h-[380px] lg:min-h-[480px]">
+              <div className="lg:col-span-7 relative bg-[#1E140C] min-h-[300px] sm:min-h-[380px] lg:min-h-full overflow-hidden flex items-center justify-center p-3 sm:p-5 group">
+                <div className="relative w-full h-full min-h-[280px] sm:min-h-[360px] lg:min-h-[460px] rounded-2xl overflow-hidden bg-[#150D07] border border-earth-800/60 shadow-inner flex items-center justify-center">
                   <Image
                     src={currentProject.image}
                     alt={currentProject.title}
                     fill
-                    className="object-cover object-top sm:object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    className="object-contain object-center p-2 sm:p-3 group-hover:scale-[1.02] transition-transform duration-500 ease-out"
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-earth-950/80 via-earth-950/20 to-transparent pointer-events-none" />
 
                   {/* Project Category Tag */}
                   <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
