@@ -38,6 +38,15 @@ export const metadata = {
   ],
   authors: [{ name: "Ayushman Bhattacharya" }],
   creator: "Ayushman Bhattacharya",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png" },
+    ],
+  },
   openGraph: {
     title: "Ayushman Bhattacharya — Full-Stack Developer",
     description: "Building modern, scalable web applications and AI-powered products.",
