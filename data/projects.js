@@ -55,7 +55,7 @@ export const projects = [
     ],
     liveUrl: "https://water-monitor-ai.demo",
     githubUrl: "https://github.com/ayushman3004/water-monitoring-system",
-    image: "/projects/water-monitor.svg",
+    image: "/projects/water-watch.png",
     color: "#4A3B2C",
     gradient: "from-[#1F1812] to-[#3B2C20]"
   }
