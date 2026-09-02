@@ -1,5 +1,25 @@
 export const projects = [
   {
+    id: "rooz-tailors-atelier",
+    title: "Rooz Tailors — Luxury Bespoke & Fashion Retail",
+    date: "Aug 2026",
+    category: "Luxury E-Commerce & AI",
+    tagline: "High-end bespoke sartorial atelier & AI stylist platform",
+    description: "A luxury digital flagship for bespoke tailoring and fashion retail, featuring an interactive 36-point body drafting system, AI stylist sizing assistant, and real-time cart orchestration.",
+    longDescription: "Architected a high-converting digital atelier with Next.js, TypeScript, and Framer Motion. Engineered an AI-driven Fit & Stylist recommendation engine, bespoke garment customizer for 5,000+ fabrics, VIP appointment booking pipeline, and interactive retail cart state management.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "AI Stylist", "E-Commerce"],
+    highlights: [
+      "AI Fit & Stylist assistant delivering intelligent sizing & fabric recommendations",
+      "Interactive 36-point body drafting customizer with real-time specification tuning",
+      "Comprehensive retail bag overlay and VIP fitting studio booking workflows"
+    ],
+    liveUrl: "https://tailoring-rho.vercel.app/",
+    githubUrl: "https://github.com/ayushman3004/tailoring",
+    image: "/projects/rooz-tailors.png",
+    color: "#2E241A",
+    gradient: "from-[#140F0A] to-[#2E2017]"
+  },
+  {
     id: "ai-investment-platform",
     title: "AI-Powered Investment Research Platform",
     date: "Jul 2026",

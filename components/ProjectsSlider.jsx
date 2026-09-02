@@ -249,11 +249,23 @@ export default function ProjectsSlider() {
 
                 {/* Bottom Action CTA Buttons */}
                 <div className="pt-6 border-t border-earth-200 flex flex-wrap items-center gap-3">
+                  {currentProject.liveUrl && (
+                    <a
+                      href={currentProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-cognac hover:bg-cognac-dark text-cream-50 text-xs sm:text-sm font-semibold transition-all duration-300 shadow-md active:scale-95 group/btn"
+                    >
+                      <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                      <span>Live Demo</span>
+                    </a>
+                  )}
+
                   <a
                     href={currentProject.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 min-w-[130px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-earth-900 hover:bg-cognac text-cream-50 text-xs sm:text-sm font-semibold transition-all duration-300 shadow-md active:scale-95 group/btn"
+                    className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-earth-900 hover:bg-cognac text-cream-50 text-xs sm:text-sm font-semibold transition-all duration-300 shadow-md active:scale-95 group/btn"
                   >
                     <GithubIcon className="w-4 h-4" />
                     <span>View Code</span>
@@ -261,7 +273,7 @@ export default function ProjectsSlider() {
 
                   <button
                     onClick={() => setActiveModalProject(currentProject)}
-                    className="flex-1 min-w-[130px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-earth-100 hover:bg-earth-200 text-earth-900 border border-earth-300 text-xs sm:text-sm font-semibold transition-all duration-300 active:scale-95"
+                    className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-earth-100 hover:bg-earth-200 text-earth-900 border border-earth-300 text-xs sm:text-sm font-semibold transition-all duration-300 active:scale-95"
                   >
                     <span>Architecture</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -358,7 +370,18 @@ export default function ProjectsSlider() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-earth-200 flex justify-end gap-3">
+              <div className="pt-4 border-t border-earth-200 flex flex-wrap justify-end gap-3">
+                {activeModalProject.liveUrl && (
+                  <a
+                    href={activeModalProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-cognac hover:bg-cognac-dark text-cream-50 text-sm font-medium flex items-center gap-2 transition-colors shadow-sm"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Live Website</span>
+                  </a>
+                )}
                 <a
                   href={activeModalProject.githubUrl}
                   target="_blank"
